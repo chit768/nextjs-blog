@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Layout, { siteTitle } from '../components/layout';
 import Link from 'next/link';
 import Date from '../components/date';
-
+import { useState } from 'react';
 // Get parsing/sorting function from utility file
 import { getSortedPostsData } from '../lib/posts';
 
@@ -17,17 +17,30 @@ export async function getStaticProps() {
 }
 
 export default function Home({ allPostsData }) {
+  const [response, setResponse] = useState("empty");
+
+  const callAPI = async () => {
+    try {
+      const res = await fetch(`https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/2015/10/10`);
+      const data = await res.json();
+      console.log('DATA: ', data);
+      setResponse(JSON.stringify(data));
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
   return (
     <Layout home>
       <Head>
         <title>{siteTitle}</title>
       </Head>
       <section className={utilStyles.headingMd}>
-        <p>I'm Chad and I love EEEEEEEEMILY</p>
+        <p>Here is a boilerplate template for a Next.js app</p>
         <p>
-          (This is a sample website - you’ll be building a site like this on{' '}
-          <a href="https://nextjs.org/learn">our Next.js tutorial</a>.)
+          <button onClick={callAPI}>Make API call</button>
         </p>
+        <p>{response}</p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
