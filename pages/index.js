@@ -4,6 +4,10 @@ import Layout, { siteTitle } from '../components/layout';
 import Link from 'next/link';
 import Date from '../components/date';
 import { useState } from 'react';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 // Get parsing/sorting function from utility file
 import { getSortedPostsData } from '../lib/posts';
 
@@ -17,7 +21,7 @@ export async function getStaticProps() {
 }
 
 export default function Home({ allPostsData }) {
-  const [response, setResponse] = useState("empty");
+  const [response, setResponse] = useState();
 
   const callAPI = async () => {
     try {
@@ -37,6 +41,9 @@ export default function Home({ allPostsData }) {
       </Head>
       <section className={utilStyles.headingMd}>
         <p>Here is a boilerplate template for a Next.js app</p>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <DatePicker label="Basic date picker" />
+        </LocalizationProvider>
         <p>
           <button onClick={callAPI}>Make API call</button>
         </p>
